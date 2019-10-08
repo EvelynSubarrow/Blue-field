@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import sys, select, threading, queue
 
 EMPTY_CELL = (" ",'',"B")
