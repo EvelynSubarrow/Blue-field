@@ -21,8 +21,8 @@ TETRIS_START_COLS = (DISPLAY_WIDTH>>1) - ((TETRIS_WIDTH*TETRIS_WIDTH_MULTIPLIER)
 
 class Tetromino(bluefield.Matrix):
     def __init__(self, matrix):
-        super().__init__(0,0, matrix=matrix)
-        self.y, self.x = 1,1
+        super().__init__(0, 0, matrix=matrix)
+        self.y,self.x = 1,1
 
     def copy(self):
         return Tetromino(self._list)
@@ -46,7 +46,6 @@ class Tetromino(bluefield.Matrix):
         newlist = copy.deepcopy(self._list)
         for y, row in enumerate(self._list):
             for x, col in enumerate(row):
-                #newlist[self.dimensions_x-1-x][y] = col
                 newlist[x][self.dimensions_y-1-y] = col
                 if self.x+x < 0 or self.x+x >= width_limit:
                     return False
@@ -118,7 +117,7 @@ with bluefield.VT220(serial.Serial('/dev/ttyUSB1', 9600, timeout=1)) as t:
 
     # Places initial borders
     for x in [TETRIS_START_COLS-1, TETRIS_START_COLS+TETRIS_WIDTH*TETRIS_WIDTH_MULTIPLIER]:
-        for y in range(1,TETRIS_HEIGHT+1):
+        for y in range(1, TETRIS_HEIGHT+1):
             t._next_state[y,x] = ("x", '', "0")
 
     high_score = 0
@@ -200,10 +199,10 @@ with bluefield.VT220(serial.Serial('/dev/ttyUSB1', 9600, timeout=1)) as t:
             translated_x = x*TETRIS_WIDTH_MULTIPLIER + TETRIS_START_COLS - TETRIS_WIDTH_MULTIPLIER
             for y in range(1, TETRIS_HEIGHT+1):
                 for m in range(TETRIS_WIDTH_MULTIPLIER):
-                    if tetris_field[y, x] or current_piece.is_occupying(y,x):
-                        t._next_state[y, translated_x + m] = (" ", "r", "B")
+                    if tetris_field[y,x] or current_piece.is_occupying(y,x):
+                        t._next_state[y,translated_x + m] = (" ", "r", "B")
                     else:
-                        t._next_state[y, translated_x + m] = (" "*bool(m&1) or "~", '', "0")
+                        t._next_state[y,translated_x + m] = (" "*bool(m&1) or "~", '', "0")
 
         # Draw the next piece
         next_y, next_x = (DISPLAY_HEIGHT>>1)-2, TETRIS_START_COLS-5*TETRIS_WIDTH_MULTIPLIER
@@ -213,9 +212,9 @@ with bluefield.VT220(serial.Serial('/dev/ttyUSB1', 9600, timeout=1)) as t:
             for y in range(1,5):
                 for m in range(TETRIS_WIDTH_MULTIPLIER):
                     if next_piece.is_occupying(y,x):
-                        t._next_state[next_y+y, translated_x + m] = (" ", "r", "B")
+                        t._next_state[next_y+y,translated_x + m] = (" ", "r", "B")
                     else:
-                        t._next_state[next_y+y, translated_x + m] = (" ", '', "B")
+                        t._next_state[next_y+y,translated_x + m] = (" ", '', "B")
 
         # Write it to the terminal
         t.flush()

@@ -29,7 +29,7 @@ class Matrix:
         else:
             self._list[coordinates[0]-1][coordinates[1]-1] = content
 
-    def get(self, y, x, default=None):
+    def get(self, y,x, default=None):
         if y<1 or x<1 or y>self.dimensions_y or x>self.dimensions_x:
             return default
         else:
@@ -74,7 +74,7 @@ class Terminal:
 
     def _thread_fn(self):
         while self.live:
-            ready_read, ready_write, error = select.select([self.file],[self.file]*bool(self.buffer_write), [], 0.5)
+            ready_read, ready_write, error = select.select([self.file], [self.file]*bool(self.buffer_write), [], 0.5)
             if self.file in ready_write and self.buffer_write:
                 self.buffer_write = self.buffer_write[self.file.write(self.buffer_write):]
             if self.file in ready_read:
@@ -142,7 +142,7 @@ class VT220(Terminal):
                     self.cursor_position(y,erase_start)
                     self.set_attributes("0")
                     self.send_raw(b"\x9B%dX" % (erase_end-erase_start))
-                for x in range(erase_start,erase_end):
+                for x in range(erase_start, erase_end):
                     self._state[y,x] = (" ", '', "B")
                     self._frame_erasure[(y,x)] = True
 
@@ -155,30 +155,30 @@ class VT220(Terminal):
     def hard_reset(self):
         self.send_raw(b"\x1Bc")
 
-    def cursor_position(self,y,x):
+    def cursor_position(self, y,x):
         if self._current_cursor_pos!=(y,x):
             self.send_raw(b"\x9B%d;%dH" % (y,x))
             self._current_cursor_pos = (y,x)
 
-    def _cursor_up(self,n=1):
+    def _cursor_up(self, n=1):
         if n and n!=1:
             self.send_raw(b"\x9B%dA" % n)
         else:
             self.send_raw(b"\x9BA")
 
-    def _cursor_down(self,n=1):
+    def _cursor_down(self, n=1):
         if n and n!=1:
             self.send_raw(b"\x9B%dB" % n)
         else:
             self.send_raw(b"\x9BB")
 
-    def _cursor_left(self,n=1):
+    def _cursor_left(self, n=1):
         if n and n!=1:
             self.send_raw(b"\x9B%dC" % n)
         else:
             self.send_raw(b"\x9BC")
 
-    def _cursor_right(self,n=1):
+    def _cursor_right(self, n=1):
         if n and n!=1:
             self.send_raw(b"\x9B%dD" % n)
         else:
