@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import time, random, queue, copy
+import time, random, queue, copy, argparse
 import serial
 import bluefield
 
@@ -106,7 +106,12 @@ add_tetromino([
     [0, 0, 0],
     ])
 
-with bluefield.VT220(serial.Serial('/dev/ttyUSB1', 9600, timeout=1)) as t:
+parser = argparse.ArgumentParser(description="JVM classfile manipulation in python3")
+parser.add_argument("file", help="serial block device")
+parser.add_argument("-b", "--baud-rate", default=9600, type=int)
+args = parser.parse_args()
+
+with bluefield.VT220(serial.Serial(args.file, args.baud_rate, timeout=1)) as t:
     t.soft_reset()
     t.cursor_on = False
 
