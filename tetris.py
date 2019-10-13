@@ -47,7 +47,7 @@ class Tetromino(bluefield.Matrix):
         for y, row in enumerate(self._list):
             for x, col in enumerate(row):
                 newlist[x][self.dimensions_y-1-y] = col
-                if self.x+x < 0 or self.x+x >= width_limit:
+                if self.x+x < 1 or self.x+x > width_limit:
                     return False
         self._list = newlist
         return True
